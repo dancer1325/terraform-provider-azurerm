@@ -4,13 +4,15 @@
 
 # Terraform Provider for Azure (Resource Manager)
 
-The AzureRM Terraform Provider allows managing resources within Azure Resource Manager.
+* AzureRM Terraform Provider
+  * allows
+    * managing resources | Azure Resource Manager
+  * recommendations
+    * if you use AzureRM Provider v4.0 -> use the ([latest version of Terraform Core](https://developer.hashicorp.com/terraform/install)). 
 
-When using version 4.0 of the AzureRM Provider we recommend using the latest version of Terraform Core ([the latest version can be found here](https://developer.hashicorp.com/terraform/install)). 
-
-* [Terraform Website](https://www.terraform.io)
-* [AzureRM Provider Documentation](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs)
-* [AzureRM Provider Usage Examples](https://github.com/hashicorp/terraform-provider-azurerm/tree/main/examples)
+* [AzureRM Provider Documentation](website/docs)
+* [AzureRM Provider Usage Examples](examples)
+* [Terraform + AzureRM Provider | HashiCorp Learn](https://learn.hashicorp.com/collections/terraform/azure-get-started)
 * [Slack Workspace for Contributors](https://terraform-azure.slack.com) ([Request Invite](https://join.slack.com/t/terraform-azure/shared_invite/enQtNDMzNjQ5NzcxMDc3LWNiY2ZhNThhNDgzNmY0MTM0N2MwZjE4ZGU0MjcxYjUyMzRmN2E5NjZhZmQ0ZTA1OTExMGNjYzA4ZDkwZDYxNDE))
 
 ## Usage Example
@@ -53,11 +55,3 @@ resource "azurerm_virtual_network" "example" {
   address_space       = ["10.0.0.0/16"]
 }
 ```
-
-* [Usage documentation for the AzureRM Provider can be found in the Terraform Registry](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs).
-* [Learn more about Terraform and the AzureRM Provider on HashiCorp Learn](https://learn.hashicorp.com/collections/terraform/azure-get-started).
-* [Additional examples can be found in the `./examples` folder within this repository](https://github.com/hashicorp/terraform-provider-azurerm/tree/main/examples).
-
-## Developing & Contributing to the Provider
-
-The [DEVELOPER.md](DEVELOPER.md) file is a basic outline on how to build and develop the provider while more detailed guides geared towards contributors can be found in the [`/contributing`](https://github.com/hashicorp/terraform-provider-azurerm/tree/main/contributing) directory of this repository.
