@@ -8,9 +8,12 @@ description: |-
 
 # azurerm_private_endpoint
 
-Manages a Private Endpoint.
-
-Azure Private Endpoint is a network interface that connects you privately and securely to a service powered by Azure Private Link. Private Endpoint uses a private IP address from your VNet, effectively bringing the service into your VNet. The service could be an Azure service such as Azure Storage, SQL, etc. or your own Private Link Service.
+* -- manages a -- Azure Private Endpoint
+* Azure Private Endpoint
+  * == network interface /
+    * 👀enable you -- to connect, privately & securely, to a -- service / powered by Azure Private Link👀
+    * -- uses -- your VNet's private IP address 
+    The service could be an Azure service such as Azure Storage, SQL, etc. or your own Private Link Service.
 
 ## Example Usage
 
