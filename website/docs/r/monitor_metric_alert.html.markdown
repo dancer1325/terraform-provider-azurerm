@@ -8,7 +8,8 @@ description: |-
 
 # azurerm_monitor_metric_alert
 
-Manages a Metric Alert within Azure Monitor.
+* manages a 
+  * 👀Metric Alert | Azure Monitor👀
 
 ## Example Usage
 
@@ -83,8 +84,14 @@ The following arguments are supported:
 -> **NOTE** One of either `criteria`, `dynamic_criteria` or `application_insights_web_test_location_availability_criteria` must be specified.
 
 * `action` - (Optional) One or more `action` blocks as defined below.
-* `enabled` - (Optional) Should this Metric Alert be enabled? Defaults to `true`.
-* `auto_mitigate` - (Optional) Should the alerts in this Metric Alert be auto resolved? Defaults to `true`.
+* `enabled`
+  * Optional
+  * == Metric Alert's alert -- should be -- enabled
+  * by default, `true`
+* `auto_mitigate`
+  * Optional
+  * == Metric Alert's alerts -- should be -- auto resolved?
+  * by default, `true`
 * `description` - (Optional) The description of this Metric Alert.
 * `frequency` - (Optional) The evaluation frequency of this Metric Alert, represented in ISO 8601 duration format. Possible values are `PT1M`, `PT5M`, `PT15M`, `PT30M` and `PT1H`. Defaults to `PT1M`.
 * `severity` - (Optional) The severity of this Metric Alert. Possible values are `0`, `1`, `2`, `3` and `4`. Defaults to `3`.
