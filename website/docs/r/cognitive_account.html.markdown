@@ -8,9 +8,11 @@ description: |-
 
 # azurerm_cognitive_account
 
-Manages a Cognitive Services Account.
-
--> **Note:** Version v2.65.0 of the Azure Provider and later will attempt to Purge the Cognitive Account during deletion. This feature can be disabled using the `features` block within the `provider` block, see [the provider documentation on the features block](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/features-block) for more information.
+* -- manages a -- Cognitive (== AI) Services Account
+  * Azure Cognitive Services (legacy) == Azure AI Services
+* | Azure Provider v2.65.0+,
+  * ⚠️| delete a Cognitive Account -> it will try to purge it ⚠️
+    * if you want to disable it -> use [`features{}`](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/features-block)
 
 ## Example Usage
 
@@ -36,63 +38,94 @@ resource "azurerm_cognitive_account" "example" {
 
 ## Argument Reference
 
-The following arguments are supported:
+* SUPPORTED arguments
+  * `name`
+    * REQUIRED
+    * TODO: Specifies the name of the Cognitive Service Account. Changing this forces a new resource to be created.
+  * `resource_group_name` - (Required) The name of the resource group in which the Cognitive Service Account is created. Changing this forces a new resource to be created.
+  * `location` - (Required) Specifies the supported Azure location where the resource exists. Changing this forces a new resource to be created.
+  * `kind`
+    * REQUIRED
+    * == Cognitive Service Account's type / -- should be -- created TODO: add link
+    * ALLOWED values
+      * `Academic`,
+      * `AnomalyDetector`,
+      * `Bing.Autosuggest`,
+      * `Bing.Autosuggest.v7`,
+      * `Bing.CustomSearch`,
+      * `Bing.Search`,
+      * `Bing.Search.v7`,
+      * `Bing.Speech`,
+      * `Bing.SpellCheck`,
+      * `Bing.SpellCheck.v7`,
+      * `CognitiveServices`,
+      * `ComputerVision`,
+      * `ContentModerator`,
+      * `ContentSafety`,
+      * `CustomSpeech`,
+      * `CustomVision.Prediction`,
+      * `CustomVision.Training`,
+      * `Emotion`,
+      * `Face`,
+      * `FormRecognizer`,
+      * `ImmersiveReader`,
+      * `LUIS`,
+      * `LUIS.Authoring`,
+      * `MetricsAdvisor`, 
+      * `OpenAI`, 
+      * `Personalizer`,
+      * `QnAMaker`, 
+      * `Recommendations`,
+      * `SpeakerRecognition`,
+      * `Speech`,
+      * `SpeechServices`,
+      * `SpeechTranslation`,
+      * `TextAnalytics`,
+      * `TextTranslation`
+      * `WebLM`
+    * if you change it -> NEW resource -- will be -- created
+    * ❌NEW Bing Search resources -- can NOT be -- created❌
+      * Reason: 🧠their APIs | Cognitive Services Platform, -- are being moved to -- NEW surface area | Microsoft.com🧠 
+      * support TILL October 30, 2023
+    * if you create your FIRST Face, Text Analytics, or Computer Vision resources -> MUST be created | Azure portal (⚠️REQUIRED selecting US region⚠️)
+      * Reason: 🧠review & acknowledge the terms and conditions🧠
+      * see [Prerequisites](https://docs.microsoft.com/azure/cognitive-services/cognitive-services-apis-create-account-cli?tabs=windows#prerequisites)
+  * `sku_name` - (Required) Specifies the SKU Name for this Cognitive Service Account. Possible values are `F0`, `F1`, `S0`, `S`, `S1`, `S2`, `S3`, `S4`, `S5`, `S6`, `P0`, `P1`, `P2`, `E0` and `DC0`.
+    * **NOTE:** SKU `DC0` is the commitment tier for Cognitive Services containers running in disconnected environments. You must obtain approval from Microsoft by submitting the [request form](https://aka.ms/csdisconnectedcontainers) first, before you can use this SKU. More information on [Purchase a commitment plan to use containers in disconnected environments](https://learn.microsoft.com/en-us/azure/cognitive-services/containers/disconnected-containers?tabs=stt#purchase-a-commitment-plan-to-use-containers-in-disconnected-environments).
+  * `custom_subdomain_name` - (Optional) The subdomain name used for token-based authentication. This property is required when `network_acls` is specified. This property is also required when using the OpenAI service with libraries which assume the Azure OpenAI endpoint is a subdomain on `https://openai.azure.com/`, eg. `https://<custom_subdomain_name>.openai.azure.com/`.  Changing this forces a new resource to be created.
+  * `dynamic_throttling_enabled` - (Optional) Whether to enable the dynamic throttling for this Cognitive Service Account.
+  * `customer_managed_key` - (Optional) A `customer_managed_key` block as documented below.
+  * `fqdns` - (Optional) List of FQDNs allowed for the Cognitive Account.
+  * `identity` - (Optional) An `identity` block as defined below.
+  * `local_auth_enabled` - (Optional) Whether local authentication methods is enabled for the Cognitive Account. Defaults to `true`.
 
-* `name` - (Required) Specifies the name of the Cognitive Service Account. Changing this forces a new resource to be created.
+  * `metrics_advisor_aad_client_id` - (Optional) The Azure AD Client ID (Application ID). This attribute is only set when kind is `MetricsAdvisor`. Changing this forces a new resource to be created.
 
-* `resource_group_name` - (Required) The name of the resource group in which the Cognitive Service Account is created. Changing this forces a new resource to be created.
+  * `metrics_advisor_aad_tenant_id` - (Optional) The Azure AD Tenant ID. This attribute is only set when kind is `MetricsAdvisor`. Changing this forces a new resource to be created.
 
-* `location` - (Required) Specifies the supported Azure location where the resource exists. Changing this forces a new resource to be created.
+  * `metrics_advisor_super_user_name` - (Optional) The super user of Metrics Advisor. This attribute is only set when kind is `MetricsAdvisor`. Changing this forces a new resource to be created.
 
-* `kind` - (Required) Specifies the type of Cognitive Service Account that should be created. Possible values are `Academic`, `AnomalyDetector`, `Bing.Autosuggest`, `Bing.Autosuggest.v7`, `Bing.CustomSearch`, `Bing.Search`, `Bing.Search.v7`, `Bing.Speech`, `Bing.SpellCheck`, `Bing.SpellCheck.v7`, `CognitiveServices`, `ComputerVision`, `ContentModerator`, `ContentSafety`, `CustomSpeech`, `CustomVision.Prediction`, `CustomVision.Training`, `Emotion`, `Face`, `FormRecognizer`, `ImmersiveReader`, `LUIS`, `LUIS.Authoring`, `MetricsAdvisor`, `OpenAI`, `Personalizer`, `QnAMaker`, `Recommendations`, `SpeakerRecognition`, `Speech`, `SpeechServices`, `SpeechTranslation`, `TextAnalytics`, `TextTranslation` and `WebLM`. Changing this forces a new resource to be created.
-
--> **NOTE:** New Bing Search resources cannot be created as their APIs are moving from Cognitive Services Platform to new surface area under Microsoft.com. Starting from October 30, 2020, existing instances of Bing Search APIs provisioned via Cognitive Services will be continuously supported for next 3 years or till the end of respective Enterprise Agreement, whichever happens first.
-
--> **NOTE:** You must create your first Face, Text Analytics, or Computer Vision resources from the Azure portal to review and acknowledge the terms and conditions. In Azure Portal, the checkbox to accept terms and conditions is only displayed when a US region is selected. More information on [Prerequisites](https://docs.microsoft.com/azure/cognitive-services/cognitive-services-apis-create-account-cli?tabs=windows#prerequisites).
-
-* `sku_name` - (Required) Specifies the SKU Name for this Cognitive Service Account. Possible values are `F0`, `F1`, `S0`, `S`, `S1`, `S2`, `S3`, `S4`, `S5`, `S6`, `P0`, `P1`, `P2`, `E0` and `DC0`.
-
--> **NOTE:** SKU `DC0` is the commitment tier for Cognitive Services containers running in disconnected environments. You must obtain approval from Microsoft by submitting the [request form](https://aka.ms/csdisconnectedcontainers) first, before you can use this SKU. More information on [Purchase a commitment plan to use containers in disconnected environments](https://learn.microsoft.com/en-us/azure/cognitive-services/containers/disconnected-containers?tabs=stt#purchase-a-commitment-plan-to-use-containers-in-disconnected-environments).
-
-* `custom_subdomain_name` - (Optional) The subdomain name used for token-based authentication. This property is required when `network_acls` is specified. This property is also required when using the OpenAI service with libraries which assume the Azure OpenAI endpoint is a subdomain on `https://openai.azure.com/`, eg. `https://<custom_subdomain_name>.openai.azure.com/`.  Changing this forces a new resource to be created.
-
-* `dynamic_throttling_enabled` - (Optional) Whether to enable the dynamic throttling for this Cognitive Service Account.
-
-* `customer_managed_key` - (Optional) A `customer_managed_key` block as documented below.
-
-* `fqdns` - (Optional) List of FQDNs allowed for the Cognitive Account.
-
-* `identity` - (Optional) An `identity` block as defined below.
-
-* `local_auth_enabled` - (Optional) Whether local authentication methods is enabled for the Cognitive Account. Defaults to `true`.
-
-* `metrics_advisor_aad_client_id` - (Optional) The Azure AD Client ID (Application ID). This attribute is only set when kind is `MetricsAdvisor`. Changing this forces a new resource to be created.
-
-* `metrics_advisor_aad_tenant_id` - (Optional) The Azure AD Tenant ID. This attribute is only set when kind is `MetricsAdvisor`. Changing this forces a new resource to be created.
-
-* `metrics_advisor_super_user_name` - (Optional) The super user of Metrics Advisor. This attribute is only set when kind is `MetricsAdvisor`. Changing this forces a new resource to be created.
-
-* `metrics_advisor_website_name` - (Optional) The website name of Metrics Advisor. This attribute is only set when kind is `MetricsAdvisor`. Changing this forces a new resource to be created.
+  * `metrics_advisor_website_name` - (Optional) The website name of Metrics Advisor. This attribute is only set when kind is `MetricsAdvisor`. Changing this forces a new resource to be created.
 
 -> **NOTE:** This URL is mandatory if the `kind` is set to `QnAMaker`.
 
 * `network_acls` - (Optional) A `network_acls` block as defined below. When this property is specified, `custom_subdomain_name` is also required to be set.
 
-* `outbound_network_access_restricted` - (Optional) Whether outbound network access is restricted for the Cognitive Account. Defaults to `false`.
+  * `outbound_network_access_restricted` - (Optional) Whether outbound network access is restricted for the Cognitive Account. Defaults to `false`.
 
-* `public_network_access_enabled` - (Optional) Whether public network access is allowed for the Cognitive Account. Defaults to `true`.
+  * `public_network_access_enabled` - (Optional) Whether public network access is allowed for the Cognitive Account. Defaults to `true`.
 
-* `qna_runtime_endpoint` - (Optional) A URL to link a QnAMaker cognitive account to a QnA runtime.
+  * `qna_runtime_endpoint` - (Optional) A URL to link a QnAMaker cognitive account to a QnA runtime.
 
-* `custom_question_answering_search_service_id` - (Optional) If `kind` is `TextAnalytics` this specifies the ID of the Search service.
+  * `custom_question_answering_search_service_id` - (Optional) If `kind` is `TextAnalytics` this specifies the ID of the Search service.
 
-* `custom_question_answering_search_service_key` - (Optional) If `kind` is `TextAnalytics` this specifies the key of the Search service.
+  * `custom_question_answering_search_service_key` - (Optional) If `kind` is `TextAnalytics` this specifies the key of the Search service.
 
 -> **NOTE:** `custom_question_answering_search_service_id` and `custom_question_answering_search_service_key` are used for [Custom Question Answering, the renamed version of QnA Maker](https://docs.microsoft.com/azure/cognitive-services/qnamaker/custom-question-answering), while `qna_runtime_endpoint` is used for [the old version of QnA Maker](https://docs.microsoft.com/azure/cognitive-services/qnamaker/overview/overview)
 
 * `storage` - (Optional) A `storage` block as defined below.
 
-* `tags` - (Optional) A mapping of tags to assign to the resource.
+  * `tags` - (Optional) A mapping of tags to assign to the resource.
 
 ---
 
