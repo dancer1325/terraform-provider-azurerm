@@ -7,6 +7,7 @@
 * AzureRM Terraform Provider
   * allows
     * managing resources | Azure Resource Manager
+      * == -- via -- Azure Resource Manager API's
   * recommendations
     * if you use AzureRM Provider v4.0 -> use the ([latest version of Terraform Core](https://developer.hashicorp.com/terraform/install)). 
 
