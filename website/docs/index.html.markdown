@@ -8,28 +8,25 @@ description: |-
 
 # Azure Provider
 
-The Azure Provider can be used to configure infrastructure in [Microsoft Azure](https://azure.microsoft.com/en-us/) using the Azure Resource Manager API's. Documentation regarding the [Data Sources](/docs/configuration/data-sources.html) and [Resources](/docs/configuration/resources.html) supported by the Azure Provider can be found in the navigation to the left.
+* [Azure's Data Sources](d)
+* [Azure's Resources](r)
 
-To learn the basics of Terraform using this provider, follow the
-hands-on [get started tutorials](https://learn.hashicorp.com/tutorials/terraform/infrastructure-as-code?in=terraform/azure-get-started).
+## Authenticating to Azure / -- supported by -- Terraform
 
-Interested in the provider's latest features, or want to make sure you're up to date? Check out the [changelog](https://github.com/hashicorp/terraform-provider-azurerm/blob/main/CHANGELOG.md) for version information and release notes.
-
-## Authenticating to Azure
-
-Terraform supports a number of different methods for authenticating to Azure:
-
-* [Authenticating to Azure using the Azure CLI](guides/azure_cli.html)
-* [Authenticating to Azure using Managed Service Identity](guides/managed_service_identity.html)
-* [Authenticating to Azure using a Service Principal and a Client Certificate](guides/service_principal_client_certificate.html)
-* [Authenticating to Azure using a Service Principal and a Client Secret](guides/service_principal_client_secret.html)
-* [Authenticating to Azure using OpenID Connect](guides/service_principal_oidc.html)
-
----
-
-We recommend using either a Service Principal or Managed Service Identity when running Terraform non-interactively (such as when running Terraform in a CI server) - and authenticating using the Azure CLI when running Terraform locally.
-
-->**Note on Permissions** The User, Service Principal or Managed Identity running Terraform should have permissions to register [Azure Resource Providers](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-providers-and-types). If the principal running Terraform has insufficient permissions to register Resource Providers then we recommend setting the property [`resource_provider_registrations`](#resource_provider_registrations) to `none` in the provider block to prevent auto-registration.
+* SUPPORTED methods
+  * [-- via -- Azure CLI](guides/azure_cli.html.markdown)
+    * if you run Terraform locally -> recommended
+  * [-- via -- Managed Service Identity](guides/managed_service_identity.html.markdown)
+    * if you run Terraform non-interactively (_Example:_ | CI server) -> recommended
+  * [-- via -- Service Principal + Client Certificate](guides/service_principal_client_certificate.html)
+    * if you run Terraform non-interactively (_Example:_ | CI server) -> recommended
+  * [-- via -- Service Principal + Client Secret](guides/service_principal_client_secret.html)
+    * if you run Terraform non-interactively (_Example:_ | CI server) -> recommended
+  * [-- via -- OpenID Connect](guides/service_principal_oidc.html)
+* requirements
+  * ⚠️User, Service Principal or Managed Identity / run Terraform -> should have permissions -- to register -- [Azure Resource Providers](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-providers-and-types)⚠️ 
+    * if INSUFFICIENT permissions -> set [`resource_provider_registrations=none`](#resource-provider-registrations)
+      * Reason: 🧠prevent auto-registration🧠
 
 ## Example Usage
 
@@ -66,56 +63,29 @@ resource "azurerm_virtual_network" "example" {
 }
 ```
 
-## Bugs and Feature Requests
-
-The Azure provider's bugs and feature requests can be found in the [GitHub repo issues](https://github.com/hashicorp/terraform-provider-azurerm/issues).
-Please avoid "me too" or "+1" comments. Instead, use a thumbs up [reaction](https://blog.github.com/2016-03-10-add-reactions-to-pull-requests-issues-and-comments/)
-on enhancement requests. Provider maintainers will often prioritize work based on the number of thumbs on an issue.
-
-Community input is appreciated on outstanding issues! We love to hear what use
-cases you have for new features, and want to provide the best possible
-experience for you using the Azure provider.
-
-If you have a bug or feature request without an existing issue
-
-* if an existing resource or field is working in an unexpected way, [file a bug](https://github.com/hashicorp/terraform-provider-azurerm/issues/new?template=bug.md).
-
-* if you'd like the provider to support a new resource or field, [file an enhancement/feature request](https://github.com/hashicorp/terraform-provider-azurerm/issues/new?template=enhancement.md).
-
-The provider maintainers will often use the assignee field on an issue to mark
-who is working on it.
-
-* An issue assigned to an individual maintainer indicates that the maintainer is working
-on the issue
-
-* If you're interested in working on an issue please leave a comment on that issue
-
----
-
-If you have configuration questions, or general questions about using the provider, try checking out:
-
-* [Terraform's community resources](https://www.terraform.io/docs/extend/community/index.html)
-* [HashiCorp support](https://support.hashicorp.com) for Terraform Enterprise customers
-
 ## Argument Reference
 
-The following arguments are supported:
-
-* `features` - (Required) A `features` block as defined below which can be used to customize the behaviour of certain Azure Provider resources.
-
-* `subscription_id` - (Required) The Subscription ID which should be used. This can also be sourced from the `ARM_SUBSCRIPTION_ID` Environment Variable.
-
--> The `subscription_id` property is required when performing a plan or apply operation, but is not required to run `terraform validate`.
-
-* `client_id` - (Optional) The Client ID which should be used. This can also be sourced from the `ARM_CLIENT_ID` Environment Variable.
-
-* `client_id_file_path` (Optional) The path to a file containing the Client ID which should be used. This can also be sourced from the `ARM_CLIENT_ID_FILE_PATH` Environment Variable.
-
-* `environment` - (Optional) The Cloud Environment which should be used. Possible values are `public`, `usgovernment`, `german`, and `china`. Defaults to `public`. This can also be sourced from the `ARM_ENVIRONMENT` Environment Variable. Not used when `metadata_host` is specified.
-
-* `tenant_id` - (Optional) The Tenant ID which should be used. This can also be sourced from the `ARM_TENANT_ID` Environment Variable.
-
-* `auxiliary_tenant_ids` - (Optional) List of auxiliary Tenant IDs required for multi-tenancy and cross-tenant scenarios. This can also be sourced from the `ARM_AUXILIARY_TENANT_IDS` Environment Variable.
+* SUPPORTED arguments
+  * `features`
+    * REQUIRED
+    * [here](#features----features)
+  * `subscription_id`
+    * REQUIRED
+    * TODO: The Subscription ID which should be used. 
+      * This can also be sourced from the `ARM_SUBSCRIPTION_ID` Environment Variable.
+        * `subscription_id` property is required when performing a plan or apply operation, but is not required to run `terraform validate`.
+  * `client_id` - (Optional) The Client ID which should be used. 
+    * This can also be sourced from the `ARM_CLIENT_ID` Environment Variable.
+  * `client_id_file_path` (Optional) The path to a file containing the Client ID which should be used. 
+    * This can also be sourced from the `ARM_CLIENT_ID_FILE_PATH` Environment Variable.
+  * `environment` - (Optional) The Cloud Environment which should be used. 
+    * Possible values are `public`, `usgovernment`, `german`, and `china`. Defaults to `public`. 
+    * This can also be sourced from the `ARM_ENVIRONMENT` Environment Variable. 
+    * Not used when `metadata_host` is specified.
+  * `tenant_id` - (Optional) The Tenant ID which should be used. 
+    * This can also be sourced from the `ARM_TENANT_ID` Environment Variable.
+  * `auxiliary_tenant_ids` - (Optional) List of auxiliary Tenant IDs required for multi-tenancy and cross-tenant scenarios. 
+    * This can also be sourced from the `ARM_AUXILIARY_TENANT_IDS` Environment Variable.
 
 ---
 
@@ -209,9 +179,11 @@ For some advanced scenarios, such as where more granular permissions are necessa
 
 It's also possible to use multiple Provider blocks within a single Terraform configuration, for example, to work with resources across multiple Subscriptions - more information can be found [in the documentation for Providers](https://www.terraform.io/docs/configuration/providers.html#multiple-provider-instances).
 
-## Features
+## Features -- `features{}`
 
-The `features` block allows configuring the behaviour of the Azure Provider, more information can be found on [the dedicated page for the `features` block](guides/features-block.html).
+* allows
+  * configuring the Azure Provider's resources' behaviour
+* see [here](guides/features-block.html.markdown)
 
 ## Resource Provider Registrations
 
